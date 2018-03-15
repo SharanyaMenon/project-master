@@ -12,7 +12,7 @@ public class Item {
     public  Item(String titleID,String photoURL){
         this.titleID = titleID;
         this.photoURL = photoURL;
-        //TODO upload image here to firebase Cloud
+
         //TODO update ID
     }
     public void update(String photoURL){
