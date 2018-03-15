@@ -50,9 +50,9 @@ public class FirstFragment extends BaseFragment implements SampleRecyclerAdapter
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mFirstFragmentView = inflater.inflate(R.layout.fragment_first,container,false);
+        mFirstFragmentView = inflater.inflate(R.layout.fragment_first, container, false);
         mRecyclerView = (RecyclerView) mFirstFragmentView.findViewById(R.id.recy_learning);
-        //设置布局管理器
+        //è®¾ç½®å¸ƒå±€ç®¡ç†å™¨
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         dataSet = new ArrayList<>();
         learningTitles = new ArrayList<>();
@@ -71,8 +71,7 @@ public class FirstFragment extends BaseFragment implements SampleRecyclerAdapter
         });
 
 
-
-        //设置adapter
+        //è®¾ç½®adapter
         mRecyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(this);

@@ -5,8 +5,11 @@ package com.example.toshimishra.photolearn;
  */
 
 public class QuizTitle extends Title {
+    public QuizTitle() {
+        super();
+    }
 
-    public  QuizTitle(String titleID,String userID,String title,String sessionID){
+    public  QuizTitle(String titleID, String userID, String title, String sessionID){
         super(titleID,userID,title,sessionID);
     }
 
