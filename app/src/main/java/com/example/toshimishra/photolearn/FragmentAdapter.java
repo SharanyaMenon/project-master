@@ -14,7 +14,7 @@ import java.util.List;
 
 public class FragmentAdapter extends FragmentPagerAdapter {
 
-    private List<BaseFragment> mNewsPagers;
+    private List<BaseFragment> mNewsPagers;//test comment
 
     private List<String> tabs = new ArrayList<>(); //标签名称
 
