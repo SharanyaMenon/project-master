@@ -44,6 +44,7 @@ public class ParticipantEditmodeAddLearningItem extends AppCompatActivity {
     ImageView imageView;
     Button button;
     EditText text;
+    String url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,7 @@ public class ParticipantEditmodeAddLearningItem extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String photoDesc = text.getText().toString();
-                new Participant().createLearningItem("testURL",photoDesc,"testGPS");
+                new Participant().createLearningItem(url,photoDesc,"testGPS");
                 finish();
             }
         });
@@ -121,6 +122,7 @@ public class ParticipantEditmodeAddLearningItem extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                url = downloadUrl.toString();
                 Log.i("downloadURL", "download:" + downloadUrl);
                 Toast.makeText(ParticipantEditmodeAddLearningItem.this, "Upload successful", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();

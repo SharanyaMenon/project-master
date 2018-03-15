@@ -3,6 +3,7 @@ package com.example.toshimishra.photolearn;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +27,8 @@ import java.util.List;
 
 
 public class TrainerSessionsActivity extends AppCompatActivity  implements SampleRecyclerAdapter.OnItemClickListener {
-    // 模拟listview中加载的数据Simulate the data loaded in the listview.
+
+    // æ¨¡æ‹Ÿlistviewä¸­åŠ è½½çš„æ•°æ®Simulate the data loaded in the listview.
     private RecyclerView mRecyclerView;
     private DatabaseReference mDatabase;
     private List<String> dataSet;
@@ -40,10 +42,10 @@ public class TrainerSessionsActivity extends AppCompatActivity  implements Sampl
         sessionList = new ArrayList<>();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recy);
-        //设置布局管理器Set the layout manager.
+        //è®¾ç½®å¸ƒå±€ç®¡ç†å™¨Set the layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SampleRecyclerAdapter(this,dataSet,LearningSession.class);
-        //设置adapter    Setadapter
+        //è®¾ç½®adapter    Setadapter
         mRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -54,11 +56,11 @@ public class TrainerSessionsActivity extends AppCompatActivity  implements Sampl
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dataSet.clear();
                 sessionList.clear();
-               for ( DataSnapshot val : dataSnapshot.getChildren()){
-                   dataSet.add(val.getValue(LearningSession.class).getSessionID());
-                   sessionList.add(val.getValue(LearningSession.class));
-               }
-               adapter.notifyDataSetChanged();
+                for ( DataSnapshot val : dataSnapshot.getChildren()){
+                    dataSet.add(val.getValue(LearningSession.class).getSessionID());
+                    sessionList.add(val.getValue(LearningSession.class));
+                }
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -117,6 +119,7 @@ public class TrainerSessionsActivity extends AppCompatActivity  implements Sampl
     private String getUid(){
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
+
 
 
 }
