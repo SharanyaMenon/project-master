@@ -29,6 +29,7 @@
         <activity android:name=".TrainerAddQuizTitle"/>
         <activity android:name=".TrainerViewQuizItems"/>
         <activity android:name=".TrainerAddQuizItem"/>
+
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
