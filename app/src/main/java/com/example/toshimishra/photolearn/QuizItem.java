@@ -40,7 +40,7 @@ public class QuizItem extends Item {
         this.ansExp = ansExp;
         this.question = question;
 
-    }
+        }
 
     public String getQuestion(){
         return question;

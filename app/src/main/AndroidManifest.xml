@@ -57,7 +57,14 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".ParticipantCompleteQuiz" />
+        <activity android:name=".ParticipantReadOnlyQuiz" />
+        <activity android:name=".ParticipantPagerViewLI" />
+        <activity android:name=".TrainerPagerViewQI" />
+        <activity android:name=".TrainerViewQuizItems" />
+        <activity android:name=".TrainerAddQuizItem" />
+        <activity android:name=".ParticipantAttemptQuizItemActivity" />
+        <activity android:name=".ParticipantPagerViewQI"></activity>
     </application>
 
 </manifest>

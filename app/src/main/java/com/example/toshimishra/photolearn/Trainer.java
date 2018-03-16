@@ -66,7 +66,7 @@ public class Trainer{
 
                 writeQuizTitle(qt);
 
-            }
+    }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
