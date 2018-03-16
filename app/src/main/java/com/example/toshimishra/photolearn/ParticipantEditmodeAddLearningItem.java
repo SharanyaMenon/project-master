@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +61,7 @@ public class ParticipantEditmodeAddLearningItem extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String photoDesc = text.getText().toString();
+
                 new Participant().createLearningItem(url,photoDesc,"testGPS");
                 finish();
             }

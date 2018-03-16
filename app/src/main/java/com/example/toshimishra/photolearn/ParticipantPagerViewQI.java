@@ -45,6 +45,12 @@ public class ParticipantPagerViewQI extends  BasePageView{
         mOption2=(RadioButton)itemView.findViewById(R.id.radioButton2);
         mOption3=(RadioButton)itemView.findViewById(R.id.radioButton3);
         mOption4=(RadioButton)itemView.findViewById(R.id.radioButton4);
+        mOption1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
 
 
         return itemView;

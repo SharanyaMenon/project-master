@@ -11,7 +11,7 @@
 
     <ProgressBar
         android:indeterminateDrawable="@anim/my_progress"
-        android:indeterminateDuration="800"
+        android:indeterminateDuration="900"
         android:layout_marginBottom="50dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -19,6 +19,6 @@
         android:layout_height="wrap_content"/>
 
     <!--引入进度条android:indeterminateDrawable="@anim/my_progress"
-        好费时间android:indeterminateDuration="800"-->
+        耗费时间android:indeterminateDuration="800"-->
 
 </RelativeLayout>

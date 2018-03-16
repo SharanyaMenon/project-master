@@ -15,8 +15,12 @@ import java.net.URL;
 
 public class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
 
-    public LoadImageTask(Listener listener) {
+    private int width;
+    private int height;
 
+    public LoadImageTask(Listener listener,int width,int height) {
+        this.width = width;
+        this.height = height;
         mListener = listener;
     }
 
@@ -31,8 +35,7 @@ public class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
     protected Bitmap doInBackground(String... args) {
 
         try {
-
-            return Bitmap.createScaledBitmap(BitmapFactory.decodeStream((InputStream)new URL(args[0]).getContent()),200,150,true);
+            return Bitmap.createScaledBitmap(BitmapFactory.decodeStream((InputStream)new URL(args[0]).getContent()),width,height,true);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package com.example.toshimishra.photolearn;
 
 import android.graphics.Bitmap;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ public class ParticipantPagerViewLI implements LoadImageTask.Listener{
     Button mUpdate;
     public ParticipantEditmodeViewLearningItems mMainActivity;
     public final LayoutInflater mInflater;
+    private int width;
 
     public ParticipantPagerViewLI(ParticipantEditmodeViewLearningItems mainActivity, String photoDesc, String gps, String photoURL) {
         super();
@@ -41,6 +43,8 @@ public class ParticipantPagerViewLI implements LoadImageTask.Listener{
     public View initView() {
         View itemView = mInflater.inflate(R.layout.activity_participant_pager_view_li,null);
         mPhotoDesc = (TextView) itemView.findViewById(R.id.descirbe);
+        mPhotoDesc.setMovementMethod(ScrollingMovementMethod.getInstance());
+        width = itemView.getWidth();
         mGPS = (TextView) itemView.findViewById(R.id.GPS);
         mDelete = (Button)itemView.findViewById(R.id.delete);
         mUpdate=(Button)itemView.findViewById(R.id.update);
@@ -58,10 +62,10 @@ public class ParticipantPagerViewLI implements LoadImageTask.Listener{
     public void initData() {
 
         Log.d("debug123"," photoDesc "+photoURL);
-
+        Log.d("debug123"," width height " + " "+width);
         mPhotoDesc.setText(photoDesc);
         mGPS.setText(gps);
-        new LoadImageTask(this).execute(photoURL);
+        new LoadImageTask(this,200,300).execute(photoURL);
 
     }
     @Override
