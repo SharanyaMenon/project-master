@@ -13,12 +13,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.toshimishra.photolearn.LearningTitle;
+import com.example.toshimishra.photolearn.Main3Activity;
+import com.example.toshimishra.photolearn.ParticipantEditmodeAddLearningTitle;
 import com.example.toshimishra.photolearn.QuizTitle;
 import com.example.toshimishra.photolearn.R;
 import com.example.toshimishra.photolearn.SampleRecyclerAdapter;
 import com.example.toshimishra.photolearn.State;
 import com.example.toshimishra.photolearn.Strings;
 import com.example.toshimishra.photolearn.TrainerAddQuizTitle;
+import com.example.toshimishra.photolearn.TrainerViewQuizItems;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,15 +55,15 @@ public class SecondFragment extends BaseFragment implements SampleRecyclerAdapte
 
         mSecondFragmentView = inflater.inflate(R.layout.fragment_second, container, false);
         mRecyclerView = (RecyclerView) mSecondFragmentView.findViewById(R.id.recy_quiz);
-        //è®¾ç½®å¸ƒå±€ç®¡ç†å™¨
+        //设置布局管理器
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //    ArrayList<String> list = new ArrayList<>();
         //      list.add("test1");
         //   list.add("test2");
 
 
-        dataSet = new ArrayList<String>();
-        quizTitles = new ArrayList<QuizTitle>();
+        dataSet = new ArrayList<>();
+        quizTitles = new ArrayList<>();
         adapter = new SampleRecyclerAdapter(getContext(), dataSet, QuizTitle.class);
         Log.d("adapter initialised", "");
         Button button = (Button) mSecondFragmentView.findViewById(R.id.bt_Add_fragment);
@@ -75,12 +79,12 @@ public class SecondFragment extends BaseFragment implements SampleRecyclerAdapte
         });
 //        SampleRecyclerAdapter adapter = new SampleRecyclerAdapter(getContext(), Strings.string_frag2);
 
-        //è®¾ç½®adapter
+        //设置adapter
         mRecyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(this);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Query query = database.getReference().child("LearningSessions-LearningTitles").child(State.getCurrentSession().getSessionID()).orderByChild("userID").equalTo(getUid());
+        Query query = database.getReference().child("LearningSessions-QuizTitles").child(State.getCurrentSession().getSessionID()).orderByChild("userID").equalTo(getUid());
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,7 +109,9 @@ public class SecondFragment extends BaseFragment implements SampleRecyclerAdapte
 
     @Override
     public void onItemClick(View view, int position, String name) {
+        State.setCurrentQuizTitle(quizTitles.get(position));
         Toast.makeText(getContext(), "click " + position, Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(getContext(), TrainerViewQuizItems.class));
     }
 
     private String getUid() {

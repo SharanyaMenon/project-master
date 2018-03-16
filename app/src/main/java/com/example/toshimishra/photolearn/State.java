@@ -7,6 +7,16 @@ package com.example.toshimishra.photolearn;
 public class State {
     private static LearningSession currentSession;
     private static LearningTitle currentLearningTitle;
+    private  static QuizTitle currentQuizTitle;
+
+    public static QuizTitle getCurrentQuizTitle() {
+        return currentQuizTitle;
+    }
+
+    public static void setCurrentQuizTitle(QuizTitle currentQuizTitle) {
+        State.currentQuizTitle = currentQuizTitle;
+    }
+
     private static boolean editMode = false;
     private static boolean trainerMode = true;
 

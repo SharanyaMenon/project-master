@@ -200,7 +200,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Text:"
+                android:text="Describe:"
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 

@@ -50,10 +50,36 @@ public class Trainer{
     }
     public void deleteLearningSession(int index){
 
-
     }
+
+
 
     public void createQuizTitle(String Title){
+        LearningSession ls = State.getCurrentSession(); //hardcodedvalue
+        Date timeStamp = Calendar.getInstance().getTime();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        String key = mDatabase.child("LearningSessions-QuizTitles").child(ls.getSessionID()).push().getKey();
+        final QuizTitle qt = new QuizTitle(key,getUid(),Title,ls.getSessionID());
+        mDatabase.child("Users").child(getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                writeQuizTitle(qt);
 
     }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Trainer", "Trainer:onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    private void writeQuizTitle(QuizTitle qt){
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("LearningSessions-QuizTitles").child(qt.getSessionID()).child(qt.getTitleID()).setValue(qt);
+        //todo cleanup
+
+    }
+
 }

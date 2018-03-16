@@ -13,10 +13,10 @@ public class QuizTitle extends Title {
         super(titleID,userID,title,sessionID);
     }
 
-    public void addQuizItem(String titleID,String photoURL, String options[],boolean isOptionAns[],String ansExp){
+   /* public void addQuizItem(String titleID,String photoURL, String options[],boolean isOptionAns[],String ansExp){
         QuizItem i = new QuizItem(titleID,photoURL,options,isOptionAns,ansExp);
 
         //TODO UPdate DB
-    }
+    }*/
 
 }
