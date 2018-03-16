@@ -1,6 +1,8 @@
 package com.example.toshimishra.photolearn;
 
-import java.util.ArrayList;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -10,12 +12,16 @@ import java.util.Date;
 public class LearningSession {
 
     private String sessionID;
+
     private String userID;
+
     private Date courseDate;
+
     private String courseCode;
+
     private Integer moduleNumber;
 
-    public LearningSession(){
+    public LearningSession() {
 
     }
 
@@ -24,7 +30,7 @@ public class LearningSession {
     }
 
     public LearningSession(String userID, Date date, Integer moduleNumber, String courseCode) {
-        this.sessionID = formatDate(date) + courseCode + moduleNumber.toString();
+        this.sessionID = formatDate(date) + "-" + formatCourseCode(courseCode) + "-M" + formatModuleNum(moduleNumber);
         this.userID = userID;
         this.courseDate = date;
         this.courseCode = courseCode;
@@ -50,10 +56,38 @@ public class LearningSession {
     public String getSessionID() {
         return sessionID;
     }
+
     public void deleteSession() {
 
     }
-    private String formatDate(Date date){
-        return (date.getDate() + "-" + date.getMonth()+"-"+date.getYear());
+
+    public String formatDate(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        return dateFormat.format(date).toString();
+    }
+
+    private String formatCourseCode(String courseCode) {
+
+        String words[] = courseCode.split(" ");
+        String formattedCourseName = "";
+        if (words.length < 3) {
+            if (words.length < 2) {
+                formattedCourseName = words[0];
+            } else {
+                formattedCourseName = words[0].substring(0, 1) + words[1].substring(0, 1);
+            }
+
+        } else {
+            formattedCourseName = words[0].substring(0, 1) + words[1].substring(0, 1) + words[2].substring(0, 1);
+        }
+        return formattedCourseName;
+    }
+
+    private String formatModuleNum(Integer moduleNumber) {
+        String formattedModuleNumber = moduleNumber.toString();
+        if (moduleNumber.toString().length() < 2) {
+            formattedModuleNumber = "0" + moduleNumber;
+        }
+        return formattedModuleNumber;
     }
 }
