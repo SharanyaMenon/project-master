@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,6 +66,10 @@ public class TrainerViewQuizItems extends AppCompatActivity implements SampleRec
             }
         });
         Button button = (Button)findViewById(R.id.bt_Add);
+        TextView text_ls = (TextView)findViewById(R.id.title_LS);
+        text_ls.setText(State.getCurrentSession().getCourseCode());
+        TextView text_q = (TextView)findViewById(R.id.title_Q);
+        text_q.setText(State.getCurrentQuizTitle().getTitle());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -9,9 +9,10 @@ public class Item {
     String titleID;
     String photoURL;
     public Item(){}
-    public  Item(String titleID,String photoURL){
+    public  Item(String titleID,String photoURL,String itemID){
         this.titleID = titleID;
         this.photoURL = photoURL;
+        this.itemID = itemID;
 
         //TODO update ID
     }

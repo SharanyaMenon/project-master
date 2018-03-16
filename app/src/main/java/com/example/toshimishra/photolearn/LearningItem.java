@@ -15,11 +15,10 @@ public class LearningItem extends Item {
     }
 
     public LearningItem(String itemID,String titleID, String photoURL, String photoDesc, String GPS, String userID){
-        super(titleID,photoURL);
+        super(titleID,photoURL,itemID);
         this.photoDesc = photoDesc;
         this.gps = GPS;
         this.userID = userID;
-        this.itemID = itemID;
     }
     public void updateLearingItem(String photoDesc,String photoURL){
         super.update(photoURL);

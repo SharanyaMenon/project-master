@@ -79,7 +79,38 @@ public class Trainer{
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("LearningSessions-QuizTitles").child(qt.getSessionID()).child(qt.getTitleID()).setValue(qt);
         //todo cleanup
+    }
+
+    public void createQuizItem(String url, String question,
+                               String option1,String option2,String option3,String option4,
+                               int answer,String ansExp){
+        final String sessionID = State.getCurrentSession().getSessionID();
+        final String titleID = State.getCurrentQuizTitle().getTitleID();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        String key = mDatabase.child("LearningSessions-QuizTitles-QuizItems").child(sessionID).child(titleID).push().getKey();
+        final QuizItem qi = new QuizItem(titleID,key,url,question,option1,option2,option3,option4,answer,ansExp);
+        mDatabase.child("Users").child(getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                writeQuizItem(qi,sessionID,titleID);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Trainer", "Trainer:onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    private void writeQuizItem(QuizItem qi,String sessionID,String titleID){
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("LearningSessions-QuizTitles-QuizItems").child(sessionID).child(titleID).child(qi.getItemID()).setValue(qi);
+        //todo cleanup
 
     }
+
+
 
 }

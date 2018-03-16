@@ -12,7 +12,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context="com.example.toshimishra.photolearn.TrainerSessionsActivity">
+    tools:context="com.example.toshimishra.photolearn.TrainerAddQuizItem">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -80,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Laerning Session"
+                android:text="Learning Session"
                 android:textColor="@android:color/black"
                 android:textSize="15dp"
                 android:textStyle="bold" />
@@ -154,11 +154,20 @@
 
             <Button
                 android:id="@+id/selectimgbtn"
-                android:layout_width="200dip"
+                android:layout_width="78dp"
+                android:layout_height="62dp"
                 android:layout_gravity="center"
-                android:layout_height="wrap_content"
-                android:text="选择照片"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="Select"
+                android:onClick="selectImage"/>
+            <Button
+                android:id="@+id/uploadimgbtn"
+                android:layout_width="78dp"
+                android:layout_height="62dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Upload"
+                android:onClick="uploadImage"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -187,36 +196,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Type of Question:"
-                android:textColor="@android:color/white"
-                android:textSize="20dp" />
-            <RadioButton
-                android:id="@+id/radioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Multiple Choice Question" />
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Multi-Select Question" />
-
-        </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -236,7 +215,9 @@
 
         </LinearLayout>
 
-
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -352,6 +333,7 @@
 
 
         </LinearLayout>
+        </RadioGroup>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
