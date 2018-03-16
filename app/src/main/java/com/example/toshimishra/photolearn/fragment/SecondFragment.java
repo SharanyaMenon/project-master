@@ -15,12 +15,14 @@ import android.widget.Toast;
 
 import com.example.toshimishra.photolearn.LearningTitle;
 import com.example.toshimishra.photolearn.Main3Activity;
+import com.example.toshimishra.photolearn.ParticipantAttemptQuizItemActivity;
 import com.example.toshimishra.photolearn.ParticipantEditmodeAddLearningTitle;
 import com.example.toshimishra.photolearn.QuizTitle;
 import com.example.toshimishra.photolearn.R;
 import com.example.toshimishra.photolearn.SampleRecyclerAdapter;
 import com.example.toshimishra.photolearn.State;
 import com.example.toshimishra.photolearn.Strings;
+import com.example.toshimishra.photolearn.TrainerAddQuizItem;
 import com.example.toshimishra.photolearn.TrainerAddQuizTitle;
 import com.example.toshimishra.photolearn.TrainerViewQuizItems;
 import com.google.firebase.auth.FirebaseAuth;
@@ -111,7 +113,10 @@ public class SecondFragment extends BaseFragment implements SampleRecyclerAdapte
     public void onItemClick(View view, int position, String name) {
         State.setCurrentQuizTitle(quizTitles.get(position));
         Toast.makeText(getContext(), "click " + position, Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(getContext(), TrainerViewQuizItems.class));
+        if(State.isTrainerMode())
+            startActivity(new Intent(getContext(), TrainerViewQuizItems.class));
+        else
+            startActivity(new Intent(getContext(), ParticipantAttemptQuizItemActivity.class));
     }
 
     private String getUid() {

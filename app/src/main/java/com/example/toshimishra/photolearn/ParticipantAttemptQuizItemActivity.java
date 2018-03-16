@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import android.widget.PopupWindow.OnDismissListener;
 import android.widget.Toast;
 
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ParticipantAttemptQuizItemActivity extends AppCompatActivity {
@@ -44,22 +47,20 @@ public class ParticipantAttemptQuizItemActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     //ViewPager总共多少个页面
-    List<BasePageView> mPageViews = new ArrayList<>();
+    List<ParticipantPagerViewQI> mPageViews = new ArrayList<>();
 
     //数据源The data source
     // List<String> mStrings = new ArrayList<>();
-    List<String> mPhotoURL = new ArrayList<>();
-    List<String> mQuiz = new ArrayList<>();
-    List<Integer> mChoice=new ArrayList<>();
-    List<String> mOption1 = new ArrayList<>();
-    List<String> mOption2= new ArrayList<>();
-    List<String> mOption3= new ArrayList<>();
-    List<String> mOption4= new ArrayList<>();
+
+    List<QuizItem> quizItemList = new ArrayList<>();
+    HashMap<String,Integer>answers = new HashMap();
 
     private ParticipantAttemptQuizItemActivity.MyAdapter mAdapter;
     private TextView mTvNum;
     private int mCurrentCount = 1;//默认为1
     private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase2;
+    private int attemptedQuestions;
 
 
     @Override
@@ -77,32 +78,22 @@ public class ParticipantAttemptQuizItemActivity extends AppCompatActivity {
     private void initDatas() {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mDatabase = database.getReference().child("LearningSessions-QuizTitles-QuizItems").child(State.getCurrentSession().getSessionID()).child(State.getCurrentQuizTitle().getTitleID());
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+
+        mDatabase2 = database.getReference().child("Users-QuizTitle-QuizItem-QuizAnswer").child(getUid()).child(State.getCurrentQuizTitle().getTitleID());
+        mDatabase2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                 mPhotoURL.clear();
-                 mOption1.clear();
-                 mOption2.clear();
-                 mOption3.clear();
-                 mOption4.clear();
-                 mPageViews.clear();
-                 mChoice.clear();
-                 mQuiz.clear();
-
+                answers.clear();
                 for ( DataSnapshot val : dataSnapshot.getChildren()){
-                    //TODO read quiz answer if any and set the choice selected
-                    addPage(val.getValue(QuizItem.class),0);
-
+                    answers.put(val.getKey(),val.getValue(QuizAnswer.class).getOptionSelcted());
+                    Log.d("debug123"," "+val.getKey()+" "+val.getValue(QuizAnswer.class).getOptionSelcted());
                 }
-                mAdapter.notifyDataSetChanged();
-                if(mQuiz.size()==0)
-                    mTvNum.setText(0+ " / " + 0);
+                if(answers.size()==quizItemList.size())
+                    terminate.setText("Submit");
                 else
-                    mTvNum.setText(mCurrentCount + " / " + mAdapter.getCount());
-                if(mChoice.size()==mQuiz.size())
-                        terminate.setText("Submit");
+                    terminate.setText("Terminate");
+
             }
 
             @Override
@@ -110,19 +101,49 @@ public class ParticipantAttemptQuizItemActivity extends AppCompatActivity {
 
             }
         });
+
+        mDatabase = database.getReference().child("LearningSessions-QuizTitles-QuizItems").child(State.getCurrentSession().getSessionID()).child(State.getCurrentQuizTitle().getTitleID());
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                 mPageViews.clear();
+                 quizItemList.clear();
+
+
+                for ( DataSnapshot val : dataSnapshot.getChildren()){
+                    addPage(val.getValue(QuizItem.class));
+
+                }
+                mAdapter.notifyDataSetChanged();
+                if(quizItemList.size()==0)
+                    mTvNum.setText("No Quiz!");
+                else
+                    mTvNum.setText(mCurrentCount + " / " + mAdapter.getCount());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
     }
 
     private void initView() {
         setContentView(R.layout.activity_participant_attempt_quiz_item);
         mTvNum = (TextView) findViewById(R.id.tvnum);
         terminate = (Button)findViewById(R.id.Terminate);
-        if(mQuiz.size()==0)
-            mTvNum.setText(0+ " / " + 0);
+        if(quizItemList.size()==0)
+            mTvNum.setText("No Quiz!");
         else
             mTvNum.setText(mCurrentCount + " / " + mAdapter.getCount());
 
-        if(mChoice.size()==mQuiz.size())
-            terminate.setText("Submit");
+
 
         //获取viewpage实例
         // Get the viewpage instance.
@@ -140,7 +161,7 @@ public class ParticipantAttemptQuizItemActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mQuiz.size();
+            return quizItemList.size();
         }
 
         @Override
@@ -155,7 +176,7 @@ public class ParticipantAttemptQuizItemActivity extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            BasePageView basePageView = mPageViews.get(position);
+            ParticipantPagerViewQI basePageView = mPageViews.get(position);
             View rootView = basePageView.getRootView();
             basePageView.initData();
             container.addView(rootView);
@@ -294,18 +315,22 @@ public class ParticipantAttemptQuizItemActivity extends AppCompatActivity {
      * 该方法封装了添加页面的代码逻辑实现，参数text为要展示的数据
      * This method encapsulates the code logic implementation of the added page, and the parameter text is the data to be displayed.
      */
-    public void addPage(QuizItem item,int choiceselected) {
-        BasePageView basePageView ;
-       /* BasePageView basePageView = new ParticipantPagerViewQI(this,item.getQuiz(),item.getPhotoURL(),item.getOption1(),item.getOption2(),item.getOption3(),item.getOption4(),int choiceselected);
-        mPhotoURL.add(item.getPhotoURL());
-        mQuiz.add(item.getQuiz());
-        mOption1.add(item.getOption1());
-        mOption2.add(item.getOption1());
-        mOption3.add(item.getOption1());
-        mOption4.add(item.getOption1());
-        mChoice.add(choiceselected);*/
-        //mPageViews.add(basePageView);//为数据源添加一项数据Add a data to the data source.
+    public void addPage(QuizItem item) {
+        int choiceselected = 0;
+        if(answers.containsKey(item.getItemID()))
+            choiceselected = answers.get(item.getItemID());
+        ParticipantPagerViewQI basePageView = new ParticipantPagerViewQI(this,item,choiceselected);
+        quizItemList.add(item);
+        if(answers.size()==quizItemList.size())
+            terminate.setText("Submit");
+        else
+            terminate.setText("Terminate");
+        mPageViews.add(basePageView);//为数据源添加一项数据Add a data to the data source.
 
     }
+    public String getUid(){
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
 }
 

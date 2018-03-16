@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.toshimishra.photolearn.LearningSession;
@@ -43,9 +44,12 @@ public class FirstFragment extends BaseFragment implements SampleRecyclerAdapter
     private RecyclerView mRecyclerView;
     private DatabaseReference mDatabase;
     private ArrayList<LearningTitle> learningTitles;
+    private ArrayList<LearningTitle> learningTitlesfull;
     private SampleRecyclerAdapter adapter;
     private ArrayList<String> dataSet;
+    private ArrayList<String> dataSetfull;
     private Query query;
+    private SearchView mSearchView;
 
 
     @Override
@@ -54,8 +58,11 @@ public class FirstFragment extends BaseFragment implements SampleRecyclerAdapter
         mRecyclerView = (RecyclerView) mFirstFragmentView.findViewById(R.id.recy_learning);
         //è®¾ç½®å¸ƒå±€ç®¡ç†å™¨
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mSearchView = (SearchView)mFirstFragmentView.findViewById(R.id.search);
         dataSet = new ArrayList<>();
+        dataSetfull = new ArrayList<>();
         learningTitles = new ArrayList<>();
+        learningTitlesfull = new ArrayList<>();
         adapter = new SampleRecyclerAdapter(getContext(), dataSet,LearningTitle.class);
         Button button = (Button)mFirstFragmentView.findViewById(R.id.bt_Add_fragment);
         //For Trainer and Participant Show appropriate buttons
@@ -63,6 +70,8 @@ public class FirstFragment extends BaseFragment implements SampleRecyclerAdapter
             button.setVisibility(View.GONE);
         if(!State.isTrainerMode() && !State.isEditMode())
             button.setVisibility(View.GONE);
+        if(State.isTrainerMode() || State.isEditMode())
+            mSearchView.setVisibility(View.GONE);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,7 +84,7 @@ public class FirstFragment extends BaseFragment implements SampleRecyclerAdapter
         mRecyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(this);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
         if(!State.isTrainerMode() && State.isEditMode())
@@ -87,11 +96,15 @@ public class FirstFragment extends BaseFragment implements SampleRecyclerAdapter
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dataSet.clear();
+                dataSetfull.clear();
                 learningTitles.clear();
+                learningTitlesfull.clear();
                 for ( DataSnapshot val : dataSnapshot.getChildren()){
                     dataSet.add(val.getValue(LearningTitle.class).getTitle());
+                    dataSetfull.add(val.getValue(LearningTitle.class).getTitle());
                     Log.d("FirstFragment ",dataSet.get(0));
                     learningTitles.add(val.getValue(LearningTitle.class));
+                    learningTitlesfull.add(val.getValue(LearningTitle.class));
                 }
                 adapter.notifyDataSetChanged();
 
@@ -99,6 +112,38 @@ public class FirstFragment extends BaseFragment implements SampleRecyclerAdapter
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                dataSet.clear();
+                learningTitles.clear();
+                if(newText==null)
+                {
+                    for(int i =0;i<dataSetfull.size();i++){
+                        dataSet.add(dataSetfull.get(i));
+                        learningTitles.add(learningTitlesfull.get(i));
+
+                    }
+                }
+                for(int i =0;i<dataSetfull.size();i++){
+                    String s = dataSetfull.get(i);
+                    if(dataSetfull.get(i).toLowerCase().contains(newText.toLowerCase())) {
+                        dataSet.add(s);
+                        learningTitles.add(learningTitlesfull.get(i));
+                    }
+                }
+                adapter.notifyDataSetChanged();
+
+                return false;
             }
         });
         return mFirstFragmentView;
